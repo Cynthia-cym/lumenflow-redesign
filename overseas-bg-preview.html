@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>出海转绘 - 背景图交互预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f; color: #e5e7eb; padding: 40px;
+    min-height: 100vh;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  .subtitle { font-size: 14px; color: #6b7280; margin-bottom: 40px; }
+  .card {
+    background: #13131a; border: 1px solid #1f1f2e; border-radius: 16px;
+    padding: 32px; margin-bottom: 24px;
+  }
+  .preview-section {
+    background: #0a0a0f; border-radius: 12px; border: 1px solid #1f1f2e;
+    padding: 60px 40px; display: flex; justify-content: center; align-items: center;
+    margin-bottom: 32px;
+  }
+  .tab-btn {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 32px; border-radius: 999px;
+    font-size: 15px; font-weight: 600; color: #fff;
+    cursor: pointer; line-height: 1; border: none;
+    min-width: 180px; justify-content: center;
+    overflow: hidden;
+  }
+  .tab-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url('assets/tab-bg/overseas-neon.jpg');
+    background-size: 240%;
+    background-position: 45% -8%;
+    opacity: 0.75;
+    z-index: 0;
+  }
+  .tab-btn svg, .tab-btn span {
+    position: relative;
+    z-index: 1;
+  }
+  .tab-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .controls { display: flex; flex-direction: column; gap: 20px; }
+  .control-row { display: flex; align-items: center; gap: 16px; }
+  .control-label { font-size: 14px; color: #9ca3af; width: 80px; flex-shrink: 0; }
+  .control-slider {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 6px; background: #1f1f2e; border-radius: 3px; outline: none;
+  }
+  .control-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 18px; height: 18px; background: #2DD4BF; border-radius: 50%; cursor: pointer;
+  }
+  .control-value {
+    font-size: 14px; color: #2DD4BF; width: 60px; text-align: right;
+    font-family: monospace; font-weight: 600;
+  }
+  .reset-btn {
+    font-size: 13px; color: #6b7280; background: transparent;
+    border: 1px solid #1f1f2e; padding: 8px 20px; border-radius: 8px;
+    cursor: pointer; margin-top: 8px; align-self: flex-end;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { color: #9ca3af; border-color: #374151; }
+  .params-display {
+    background: #0a0a0f; border-radius: 10px; padding: 16px 20px;
+    font-family: monospace; font-size: 13px; color: #9ca3af;
+    border: 1px solid #1f1f2e; line-height: 1.8;
+  }
+  .params-display span { color: #2DD4BF; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>出海转绘 - 背景图交互预览</h1>
+  <p class="subtitle">拖动滑块调整背景图参数，实时预览按钮效果</p>
+
+  <div class="card">
+    <div class="preview-section">
+      <div class="tab-btn" id="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
+        </svg>
+        <span>出海转绘</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="control-row">
+        <span class="control-label">水平位置</span>
+        <input type="range" class="control-slider" id="x" min="-50" max="150" value="45">
+        <span class="control-value" id="x-val">45%</span>
+      </div>
+      <div class="control-row">
+        <span class="control-label">垂直位置</span>
+        <input type="range" class="control-slider" id="y" min="-50" max="150" value="-8">
+        <span class="control-value" id="y-val">-8%</span>
+      </div>
+      <div class="control-row">
+        <span class="control-label">背景大小</span>
+        <input type="range" class="control-slider" id="s" min="100" max="400" value="240">
+        <span class="control-value" id="s-val">240%</span>
+      </div>
+      <div class="control-row">
+        <span class="control-label">不透明度</span>
+        <input type="range" class="control-slider" id="o" min="0" max="100" value="75">
+        <span class="control-value" id="o-val">75%</span>
+      </div>
+      <button class="reset-btn" id="reset">重置参数</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="params-display" id="params">
+      background-position: <span>45% -8%</span>;<br>
+      background-size: <span>240%</span>;<br>
+      opacity: <span>0.75</span>;
+    </div>
+  </div>
+</div>
+
+<script>
+const btn = document.getElementById('btn');
+const xSlider = document.getElementById('x');
+const ySlider = document.getElementById('y');
+const sSlider = document.getElementById('s');
+const oSlider = document.getElementById('o');
+const xVal = document.getElementById('x-val');
+const yVal = document.getElementById('y-val');
+const sVal = document.getElementById('s-val');
+const oVal = document.getElementById('o-val');
+const params = document.getElementById('params');
+const resetBtn = document.getElementById('reset');
+
+// 创建固定的动态样式元素
+const dynamicStyle = document.createElement('style');
+document.head.appendChild(dynamicStyle);
+
+function update() {
+  const x = xSlider.value;
+  const y = ySlider.value;
+  const s = sSlider.value;
+  const o = oSlider.value;
+  
+  // 更新伪元素样式
+  dynamicStyle.textContent = `
+    .tab-btn::before {
+      background-size: ${s}% !important;
+      background-position: ${x}% ${y}% !important;
+      opacity: ${o / 100} !important;
+    }
+  `;
+  
+  xVal.textContent = x + '%';
+  yVal.textContent = y + '%';
+  sVal.textContent = s + '%';
+  oVal.textContent = o + '%';
+  
+  params.innerHTML = `
+    background-position: <span>${x}% ${y}%</span>;<br>
+    background-size: <span>${s}%</span>;<br>
+    opacity: <span>${o / 100}</span>;
+  `;
+}
+
+xSlider.addEventListener('input', update);
+ySlider.addEventListener('input', update);
+sSlider.addEventListener('input', update);
+oSlider.addEventListener('input', update);
+
+resetBtn.addEventListener('click', () => {
+  xSlider.value = 45;
+  ySlider.value = -8;
+  sSlider.value = 240;
+  oSlider.value = 75;
+  update();
+});
+</script>
+</body>
+</html>

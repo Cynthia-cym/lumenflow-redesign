@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumenFlow - Tab 背景图方案对比</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f; color: #e5e7eb; padding: 40px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  .subtitle { font-size: 14px; color: #6b7280; margin-bottom: 40px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+  .card { background: #13131a; border: 1px solid #1f1f2e; border-radius: 16px; padding: 20px; }
+  .card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #fff; }
+  .section-label { font-size: 11px; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; }
+  .original-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #1f1f2e; margin-bottom: 16px; height: 140px; }
+  .original-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+  .button-wrap { background: #0a0a0f; border-radius: 10px; border: 1px solid #1f1f2e; padding: 24px; display: flex; justify-content: center; align-items: center; }
+  .tab-btn {
+    position: relative; display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 32px; border-radius: 999px; font-size: 15px; font-weight: 600;
+    color: #fff; border: none; cursor: pointer; line-height: 1;
+    background-size: cover; background-position: top center; background-repeat: no-repeat;
+    min-width: 160px; justify-content: center;
+  }
+  .tab-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Tab 背景图方案对比</h1>
+  <p class="subtitle">从素材图顶部截取作为按钮背景，白色文字 + 图标</p>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">方案 1</div>
+      <div class="section-label">原图</div>
+      <div class="original-wrap"><img src="assets/tab-bg/options/option1.jpg" alt="方案1"></div>
+      <div class="section-label">按钮效果</div>
+      <div class="button-wrap">
+        <div class="tab-btn" style="background-image: url('assets/tab-bg/options/option1.jpg')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          剧集制作
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">方案 2</div>
+      <div class="section-label">原图</div>
+      <div class="original-wrap"><img src="assets/tab-bg/options/option2.jpg" alt="方案2"></div>
+      <div class="section-label">按钮效果</div>
+      <div class="button-wrap">
+        <div class="tab-btn" style="background-image: url('assets/tab-bg/options/option2.jpg')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+          出海转绘
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">方案 3</div>
+      <div class="section-label">原图</div>
+      <div class="original-wrap"><img src="assets/tab-bg/options/option3.jpg" alt="方案3"></div>
+      <div class="section-label">按钮效果</div>
+      <div class="button-wrap">
+        <div class="tab-btn" style="background-image: url('assets/tab-bg/options/option3.jpg')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+          自由画布
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">方案 4</div>
+      <div class="section-label">原图</div>
+      <div class="original-wrap"><img src="assets/tab-bg/options/option4.jpg" alt="方案4"></div>
+      <div class="section-label">按钮效果</div>
+      <div class="button-wrap">
+        <div class="tab-btn" style="background-image: url('assets/tab-bg/options/option4.jpg')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          剧集制作
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">方案 5</div>
+      <div class="section-label">原图</div>
+      <div class="original-wrap"><img src="assets/tab-bg/options/option5.jpg" alt="方案5"></div>
+      <div class="section-label">按钮效果</div>
+      <div class="button-wrap">
+        <div class="tab-btn" style="background-image: url('assets/tab-bg/options/option5.jpg')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+          出海转绘
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

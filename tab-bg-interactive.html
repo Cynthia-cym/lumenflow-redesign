@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumenFlow - Tab 背景图交互预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f; color: #e5e7eb; padding: 40px;
+  }
+  .container { max-width: 1400px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  .subtitle { font-size: 14px; color: #6b7280; margin-bottom: 40px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 24px; }
+  .card { background: #13131a; border: 1px solid #1f1f2e; border-radius: 16px; padding: 20px; }
+  .card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+  .card-badge { font-size: 11px; font-weight: 500; color: #2DD4BF; background: rgba(45,212,191,0.1); padding: 3px 8px; border-radius: 10px; }
+  .original-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #1f1f2e; margin-bottom: 16px; height: 120px; }
+  .original-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+  .button-wrap { background: #0a0a0f; border-radius: 10px; border: 1px solid #1f1f2e; padding: 28px 20px; display: flex; justify-content: center; align-items: center; margin-bottom: 16px; }
+  .tab-btn {
+    position: relative; display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 32px; border-radius: 999px; font-size: 15px; font-weight: 600;
+    color: #fff; border: none; cursor: pointer; line-height: 1;
+    background-size: 200%; background-position: 50% 0%; background-repeat: no-repeat;
+    min-width: 160px; justify-content: center;
+  }
+  .tab-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .controls { display: flex; flex-direction: column; gap: 12px; }
+  .control-row { display: flex; align-items: center; gap: 12px; }
+  .control-label { font-size: 12px; color: #9ca3af; width: 60px; flex-shrink: 0; }
+  .control-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: #1f1f2e; border-radius: 2px; outline: none; }
+  .control-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; background: #2DD4BF; border-radius: 50%; cursor: pointer; }
+  .control-value { font-size: 12px; color: #2DD4BF; width: 45px; text-align: right; font-family: monospace; }
+  .reset-btn { font-size: 11px; color: #6b7280; background: transparent; border: 1px solid #1f1f2e; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-top: 4px; align-self: flex-end; }
+  .reset-btn:hover { color: #9ca3af; border-color: #374151; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Tab 背景图交互预览</h1>
+  <p class="subtitle">拖动滑块调整背景图的截取范围，实时预览按钮效果</p>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+const options = [
+  { id: 1, name: '方案 1', img: 'assets/tab-bg/options/option1.jpg', label: '自由画布', icon: 'star' },
+  { id: 2, name: '方案 2', img: 'assets/tab-bg/options/option2.jpg', label: '自由画布', icon: 'star' },
+  { id: 3, name: '方案 3', img: 'assets/tab-bg/options/option3.jpg', label: '出海转绘', icon: 'plane' },
+  { id: 4, name: '方案 4', img: 'assets/tab-bg/options/option4.jpg', label: '出海转绘', icon: 'plane' },
+  { id: 5, name: '方案 5', img: 'assets/tab-bg/options/option5.jpg', label: '出海转绘', icon: 'plane' },
+  { id: 6, name: '方案 6 - 极光A', img: 'assets/tab-bg/options/option6.jpg', label: '剧集制作', icon: 'video', badge: 'NEW' },
+  { id: 7, name: '方案 7 - 极光B', img: 'assets/tab-bg/options/option7.jpg', label: '剧集制作', icon: 'video', badge: 'NEW' },
+];
+
+const icons = {
+  video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>',
+  plane: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l1.9 5.1L16 13l-5.1 1.9L9 20l-1.9-5.1L2 13l5.1-1.9z"></path><path d="M18.5 3.5l0.7 1.9 1.9 0.7-1.9 0.7-0.7 1.9-0.7-1.9-1.9-0.7 1.9-0.7z"></path></svg>',
+};
+
+const grid = document.getElementById('grid');
+
+options.forEach(opt => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-title">
+      <span>${opt.name}</span>
+      ${opt.badge ? `<span class="card-badge">${opt.badge}</span>` : ''}
+    </div>
+    <div class="original-wrap"><img src="${opt.img}" alt="${opt.name}"></div>
+    <div class="button-wrap">
+      <div class="tab-btn" id="btn-${opt.id}" style="background-image: url('${opt.img}')">
+        ${icons[opt.icon]}
+        ${opt.label}
+      </div>
+    </div>
+    <div class="controls">
+      <div class="control-row">
+        <span class="control-label">水平</span>
+        <input type="range" class="control-slider" id="x-${opt.id}" min="0" max="100" value="50">
+        <span class="control-value" id="x-val-${opt.id}">50%</span>
+      </div>
+      <div class="control-row">
+        <span class="control-label">垂直</span>
+        <input type="range" class="control-slider" id="y-${opt.id}" min="0" max="100" value="0">
+        <span class="control-value" id="y-val-${opt.id}">0%</span>
+      </div>
+      <div class="control-row">
+        <span class="control-label">大小</span>
+        <input type="range" class="control-slider" id="s-${opt.id}" min="100" max="300" value="200">
+        <span class="control-value" id="s-val-${opt.id}">200%</span>
+      </div>
+      <button class="reset-btn" id="reset-${opt.id}">重置</button>
+    </div>
+  `;
+  grid.appendChild(card);
+
+  const btn = document.getElementById(`btn-${opt.id}`);
+  const xSlider = document.getElementById(`x-${opt.id}`);
+  const ySlider = document.getElementById(`y-${opt.id}`);
+  const sSlider = document.getElementById(`s-${opt.id}`);
+  const xVal = document.getElementById(`x-val-${opt.id}`);
+  const yVal = document.getElementById(`y-val-${opt.id}`);
+  const sVal = document.getElementById(`s-val-${opt.id}`);
+  const resetBtn = document.getElementById(`reset-${opt.id}`);
+
+  function update() {
+    const x = xSlider.value;
+    const y = ySlider.value;
+    const s = sSlider.value;
+    btn.style.backgroundPosition = `${x}% ${y}%`;
+    btn.style.backgroundSize = `${s}%`;
+    xVal.textContent = `${x}%`;
+    yVal.textContent = `${y}%`;
+    sVal.textContent = `${s}%`;
+  }
+
+  xSlider.addEventListener('input', update);
+  ySlider.addEventListener('input', update);
+  sSlider.addEventListener('input', update);
+  resetBtn.addEventListener('click', () => {
+    xSlider.value = 50;
+    ySlider.value = 0;
+    sSlider.value = 200;
+    update();
+  });
+});
+</script>
+</body>
+</html>
